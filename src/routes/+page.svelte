@@ -1,10 +1,15 @@
-<script>
-	import Button from '$lib/components/ui/button/button.svelte';
+<script lang="ts">
+	import DataTable from './data-table.svelte';
+	import { columns } from './columns.js';
+
+	let { data } = $props();
 </script>
 
-
-<div class="m-2 flex">
-	<div class="m-auto border shadow">
-		<h1 class="text-2xl font-bold text-gray-800">Welcome!</h1>
+<div class="flex justify-center p-4">
+	<div class="w-2/3 rounded-xl p-5">
+		<div class="flex flex-col">
+			<h1 class="text-2xl font-bold">Your Library</h1>
+			<DataTable data={data.books} {columns} />
+		</div>
 	</div>
 </div>

@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
 import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/session';
+import type { Book } from './columns';
 
 export const load: PageServerLoad = async (event: RequestEvent) => {
 	// Not logged in
@@ -23,9 +24,28 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 		return redirect(302, '/2fa');
 	}
 
+	const books: Book[] = [
+		{
+			id: '728ed52f',
+			title: 'foo',
+			author: 'jimbob',
+			status: 'reading',
+			owner: 'Ciaron'
+		},
+		{
+			id: '489e1d42',
+			title: 'bar',
+			author: 'jimbob',
+			status: 'read',
+			owner: 'Ciaron'
+		}
+		// ...
+	];
+
 	// User is logged in already
 	return {
-		user: event.locals.user
+		user: event.locals.user,
+		books
 	};
 };
 
