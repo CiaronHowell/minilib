@@ -18,9 +18,13 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="m-auto flex flex-col gap-3 rounded-xl border p-5">
-	<h1 class="font-2xl font-bold">Two-factor authentication</h1>
-	<p>Enter the code from your authenticator app.</p>
+<div
+	class="m-auto flex flex-col gap-[var(--form-gap)] rounded-xl border p-5 [--form-gap:--spacing(4)]"
+>
+	<div>
+		<h1 class="font-2xl font-bold">Two-factor authentication</h1>
+		<p>Enter the code from your authenticator app.</p>
+	</div>
 	<form method="post" use:enhance>
 		<Form.Field {form} name="code">
 			<Form.Control>
@@ -33,7 +37,9 @@
 		{#if $message}
 			<Form.Description>{$message}</Form.Description>
 		{/if}
-		<Form.Button>Verify</Form.Button>
-		<Form.Button href="/2fa/reset">Use recovery code</Form.Button>
+		<div class="mt-[var(--form-gap)] flex justify-end gap-2">
+			<Form.Button>Verify</Form.Button>
+			<Form.Button href="/2fa/reset">Use recovery code</Form.Button>
+		</div>
 	</form>
 </div>
