@@ -9,7 +9,7 @@
 	<div class="w-2/3 rounded-xl p-5">
 		<div class="flex flex-col">
 			<h1 class="text-2xl font-bold">Your Library</h1>
-			<DataTable data={data.books} {columns} />
+			<DataTable data={data.books} onlyOwner={true} {columns} />
 		</div>
 	</div>
 </div>

@@ -8,13 +8,21 @@
 	import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Button } from '$lib/components/ui/button';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
 		data: TData[];
 	};
 
-	let { data, columns }: DataTableProps<TData, TValue> = $props();
+	let { data, columns, onlyOwner }: DataTableProps<TData, TValue> & { onlyOwner: boolean } =
+		$props();
+
+	if (onlyOwner) {
+		columns = columns.filter((col) => {
+			return col.header?.toString().toLowerCase() != 'owner';
+		});
+	}
 
 	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
@@ -36,14 +44,19 @@
 			}
 		},
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel()
+		getPaginationRowModel: getPaginationRowModel(),
+		onColumnVisibilityChange: (updater) => {}
 	});
+
+	if (onlyOwner) {
+		table.getColumn('owner')?.toggleVisibility(true);
+	}
 </script>
 
 <div class="py-4">
-	<div class="rounded-md border">
+	<div class="overflow-hidden rounded-md border">
 		<Table.Root>
-			<Table.Header class="text-md font-bold">
+			<Table.Header class="text-md bg-muted font-bold">
 				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 					<Table.Row>
 						{#each headerGroup.headers as header (header.id)}
@@ -81,6 +94,7 @@
 			<h1 class="text-md font-light">Page {pagination.pageIndex + 1} of {table.getPageCount()}</h1>
 		</div>
 		<div>
+			<DropdownMenu.Root></DropdownMenu.Root>
 			<Button
 				variant="outline"
 				size="sm"
