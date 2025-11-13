@@ -72,9 +72,11 @@
 </nav>
 
 <ModeWatcher />
-{@render children?.()}
+<main class="flex-1">
+	{@render children?.()}
+</main>
 
-<footer class="fixed inset-x-0 bottom-0">
+<footer>
 	<Separator />
 	<div class="p-5">
 		<p class="text-right text-gray-500">

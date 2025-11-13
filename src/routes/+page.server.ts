@@ -38,6 +38,48 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 			author: 'jimbob',
 			status: 'read',
 			owner: 'Ciaron'
+		},
+		{
+			id: '728ed52f',
+			title: 'foo',
+			author: 'jimbob',
+			status: 'reading',
+			owner: 'Ciaron'
+		},
+		{
+			id: '489e1d42',
+			title: 'bar',
+			author: 'jimbob',
+			status: 'read',
+			owner: 'Ciaron'
+		},
+		{
+			id: '728ed52f',
+			title: 'foo',
+			author: 'jimbob',
+			status: 'reading',
+			owner: 'Ciaron'
+		},
+		{
+			id: '489e1d42',
+			title: 'bar',
+			author: 'jimbob',
+			status: 'read',
+			owner: 'Ciaron'
+		},
+		{
+			id: '728ed52f',
+			title: 'foo',
+			author: 'jimbob',
+			status: 'reading',
+			owner: 'Ciaron'
+		},
+		{
+			id: '489e1d42',
+			title: 'bar',
+			author: 'jimbob',
+			status: 'read',
+			owner: 'Ciaron'
 		}
 		// ...
 	];

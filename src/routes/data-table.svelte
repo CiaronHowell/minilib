@@ -3,12 +3,19 @@
 		type ColumnDef,
 		type PaginationState,
 		getCoreRowModel,
-		getPaginationRowModel
+		getPaginationRowModel,
+		getFilteredRowModel,
+		type ColumnFiltersState
 	} from '@tanstack/table-core';
 	import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { Input } from '$lib/components/ui/input';
+	import { PlusIcon } from 'lucide-svelte';
+	import * as Select from '$lib/components/ui/select';
+	import { int, number, string } from 'zod';
+	import { Separator } from '$lib/components/ui/separator';
 
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
@@ -24,7 +31,10 @@
 		});
 	}
 
-	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+	const pageSizes = [5, 10, 15];
+
+	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: pageSizes[0] });
+	let columnFilters = $state<ColumnFiltersState>([]);
 
 	const table = createSvelteTable({
 		get data() {
@@ -34,6 +44,9 @@
 		state: {
 			get pagination() {
 				return pagination;
+			},
+			get columnFilters() {
+				return columnFilters;
 			}
 		},
 		onPaginationChange: (updater) => {
@@ -45,15 +58,31 @@
 		},
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		onColumnVisibilityChange: (updater) => {}
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnFiltersChange: (updater) => {
+			if (typeof updater === 'function') {
+				columnFilters = updater(columnFilters);
+			} else {
+				columnFilters = updater;
+			}
+		}
 	});
-
-	if (onlyOwner) {
-		table.getColumn('owner')?.toggleVisibility(true);
-	}
 </script>
 
-<div class="py-4">
+<div class="flex flex-col gap-3 py-4">
+	<div class="flex justify-between">
+		<Input
+			placeholder="Filter by title..."
+			value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+			oninput={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
+			onchange={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
+			class="max-w-sm"
+		/>
+		<Button variant="secondary">
+			<PlusIcon />
+			Add
+		</Button>
+	</div>
 	<div class="overflow-hidden rounded-md border">
 		<Table.Root>
 			<Table.Header class="text-md bg-muted font-bold">
@@ -89,9 +118,28 @@
 			</Table.Body>
 		</Table.Root>
 	</div>
-	<div class="flex items-center justify-between space-x-2 py-2">
-		<div class="flex items-center">
-			<h1 class="text-md font-light">Page {pagination.pageIndex + 1} of {table.getPageCount()}</h1>
+	<div class="flex items-center justify-between space-x-2">
+		<div class="flex items-center gap-3">
+			<h1 class="text-sm font-light">Page {pagination.pageIndex + 1} of {table.getPageCount()}</h1>
+			<div class="self-stretch">
+				<Separator orientation="vertical" />
+			</div>
+			<div class="flex items-center gap-2">
+				<h1 class="text-sm font-light">Number of rows:</h1>
+				<Select.Root
+					type="single"
+					onValueChange={(size) => {
+						table.setPageSize(parseInt(size));
+					}}
+				>
+					<Select.Trigger>{pagination.pageSize}</Select.Trigger>
+					<Select.Content>
+						{#each pageSizes as pageSize}
+							<Select.Item value={pageSize.toString()}>{pageSize}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
 		</div>
 		<div>
 			<DropdownMenu.Root></DropdownMenu.Root>
