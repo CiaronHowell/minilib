@@ -2,10 +2,8 @@
 	import * as Form from '$lib/components/ui/form';
 	import { schema, type Schema } from './schema';
 
-	import type { ActionData } from './$types';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
-	import { Control } from 'formsnap';
 	import Input from '$lib/components/ui/input/input.svelte';
 
 	let { data }: { data: { form: SuperValidated<Infer<Schema>> } } = $props();
@@ -13,9 +11,8 @@
 	const form = superForm(data.form, {
 		validators: zod4Client(schema)
 	});
-	const message = form.message;
 
-	const { form: formData, enhance } = form;
+	const { form: formData, message, enhance } = form;
 </script>
 
 <div
