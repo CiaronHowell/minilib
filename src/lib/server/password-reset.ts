@@ -5,7 +5,7 @@ import { sha256 } from '@oslojs/crypto/sha2';
 
 import type { RequestEvent } from '@sveltejs/kit';
 import type { User } from './user';
-import { passwordResetSessions, users } from './db/schema';
+import { passwordResetSessions, users } from './db/schema/users';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
 
 export async function createPasswordResetSession(
@@ -64,6 +64,8 @@ export async function validatePasswordResetSessionToken(
 	};
 	const user: User = {
 		id: sessionRow.userId,
+		firstName: sessionRow.firstName,
+		lastName: sessionRow.lastName,
 		email: sessionRow.email,
 		emailVerified: Boolean(sessionRow.emailVerified),
 		registered2FA: Boolean(sessionRow.registered2FA)

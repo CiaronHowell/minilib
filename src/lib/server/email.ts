@@ -1,6 +1,6 @@
 import { count, eq } from 'drizzle-orm';
 import { db } from './db';
-import { users } from './db/schema';
+import { users } from './db/schema/users';
 
 export async function checkEmailAvailability(email: string): Promise<boolean> {
 	const row = await db.select({ count: count() }).from(users).where(eq(users.email, email));

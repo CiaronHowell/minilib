@@ -1,6 +1,6 @@
 import { blob, index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-// Implemented from lucia
+// Implemented auth from lucia
 
 export const users = sqliteTable(
 	'users',
@@ -51,36 +51,3 @@ export const passwordResetSessions = sqliteTable('password_reset_sessions', {
 	twoFactorVerified: integer('two_factor_verified').notNull().default(0)
 });
 export type PasswordResetSessions = typeof passwordResetSessions.$inferSelect;
-
-export const books = sqliteTable('books', {
-	id: text('id').primaryKey(),
-	// TODO: decide whether to enforce an isbn, people might want to add books without
-	isbn: integer('isbn'),
-	title: text('title').notNull(),
-	author: text('author').notNull(),
-	owner: integer('owner')
-		.notNull()
-		.references(() => users.id),
-	lentTo: integer('lent_to').references(() => users.id)
-});
-export type Books = typeof books.$inferSelect;
-
-enum BookStatus {
-	Finished = 'finished',
-	Reading = 'reading',
-	Todo = 'todo'
-}
-
-export const bookActivity = sqliteTable('book_status', {
-	id: text('id').primaryKey(),
-	book: text('book')
-		.notNull()
-		.references(() => books.id),
-	user: integer('user_id')
-		.notNull()
-		.references(() => users.id),
-	status: text('status', {
-		enum: [BookStatus.Finished, BookStatus.Reading, BookStatus.Todo]
-	}).notNull()
-});
-export type BookActivity = typeof bookActivity.$inferSelect;

@@ -1,0 +1,2 @@
+ALTER TABLE `books` RENAME COLUMN "lent_to" TO "loaned_to";--> statement-breakpoint
+ALTER TABLE `books` ALTER COLUMN "loaned_to" TO "loaned_to" integer REFERENCES users(id) ON DELETE no action ON UPDATE no action;

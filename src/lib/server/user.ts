@@ -1,6 +1,6 @@
 import { and, eq, getTableColumns, sql } from 'drizzle-orm';
 import { db } from './db';
-import { users, type Users } from './db/schema';
+import { users, type Users } from './db/schema/users';
 import { decrypt, decryptToString, encrypt, encryptString } from './encryption';
 import { hashPassword } from './password';
 import { generateRandomRecoveryCode } from './utils';

@@ -50,6 +50,20 @@
       "when": 1763126949570,
       "tag": "0006_normal_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1763134544410,
+      "tag": "0007_clumsy_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1763136487494,
+      "tag": "0008_amusing_exiles",
+      "breakpoints": true
     }
   ]
 }

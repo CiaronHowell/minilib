@@ -1,6 +1,6 @@
 import { eq, and } from 'drizzle-orm';
 import { db } from './db';
-import * as table from '$lib/server/db/schema';
+import { users, sessions } from '$lib/server/db/schema/users';
 import { decryptToString, encryptString } from './encryption';
 import { ExpiringTokenBucket } from './rate-limit';
 import { generateRandomRecoveryCode } from './utils';
@@ -13,7 +13,7 @@ export async function resetUser2FAWithRecoveryCode(
 	recoveryCode: string
 ): Promise<boolean> {
 	// Note: In Postgres and MySQL, these queries should be done in a transaction using SELECT FOR UPDATE
-	const row = await db.select().from(table.users).where(eq(table.users.id, userId)).limit(0);
+	const row = await db.select().from(users).where(eq(users.id, userId)).limit(0);
 
 	if (row === null || row.length < 1) {
 		return false;
@@ -27,11 +27,11 @@ export async function resetUser2FAWithRecoveryCode(
 	const newRecoveryCode = generateRandomRecoveryCode();
 	const encryptedNewRecoveryCode = encryptString(newRecoveryCode);
 	await db
-		.update(table.sessions)
+		.update(sessions)
 		.set({
 			twoFactorVerified: 0
 		})
-		.where(eq(table.sessions.userId, userId));
+		.where(eq(sessions.userId, userId));
 
 	// Compare old recovery code to ensure recovery code wasn't updated.
 	// const result = db.execute(
@@ -39,12 +39,12 @@ export async function resetUser2FAWithRecoveryCode(
 	// 	[encryptedNewRecoveryCode, userId, encryptedRecoveryCode]
 	// );
 	const result = await db
-		.update(table.users)
+		.update(users)
 		.set({
 			recoveryCode: Buffer.from(encryptedNewRecoveryCode),
 			totpKey: null
 		})
-		.where(and(eq(table.users.id, userId), eq(table.users.recoveryCode, encryptedRecoveryCode)));
+		.where(and(eq(users.id, userId), eq(users.recoveryCode, encryptedRecoveryCode)));
 
 	return result.rowsAffected > 0;
 }
