@@ -54,7 +54,8 @@ export type PasswordResetSessions = typeof passwordResetSessions.$inferSelect;
 
 export const books = sqliteTable('books', {
 	id: text('id').primaryKey(),
-	isbn: integer('isbn'), // TODO: decide whether to enforce an isbn
+	// TODO: decide whether to enforce an isbn, people might want to add books without
+	isbn: integer('isbn'),
 	title: text('title').notNull(),
 	author: text('author').notNull(),
 	owner: integer('owner')
@@ -64,6 +65,12 @@ export const books = sqliteTable('books', {
 });
 export type Books = typeof books.$inferSelect;
 
+enum BookStatus {
+	Finished = 'finished',
+	Reading = 'reading',
+	Todo = 'todo'
+}
+
 export const bookActivity = sqliteTable('book_status', {
 	id: text('id').primaryKey(),
 	book: text('book')
@@ -72,6 +79,8 @@ export const bookActivity = sqliteTable('book_status', {
 	user: integer('user_id')
 		.notNull()
 		.references(() => users.id),
-	status: text('status', { enum: ['finished', 'reading', 'todo'] }).notNull()
+	status: text('status', {
+		enum: [BookStatus.Finished, BookStatus.Reading, BookStatus.Todo]
+	}).notNull()
 });
 export type BookActivity = typeof bookActivity.$inferSelect;
