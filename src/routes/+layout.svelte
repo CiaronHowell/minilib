@@ -72,7 +72,7 @@
 </nav>
 
 <ModeWatcher />
-<main class="flex-1">
+<main class="flex flex-1">
 	{@render children?.()}
 </main>
 

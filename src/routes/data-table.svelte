@@ -14,7 +14,6 @@
 	import { Input } from '$lib/components/ui/input';
 	import { PlusIcon } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
-	import { int, number, string } from 'zod';
 	import { Separator } from '$lib/components/ui/separator';
 
 	type DataTableProps<TData, TValue> = {
