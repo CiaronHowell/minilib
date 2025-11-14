@@ -16,7 +16,6 @@ export const users = sqliteTable(
 	},
 	(table) => [index('email_idx').on(table.email)]
 );
-
 export type Users = typeof users.$inferSelect;
 
 export const sessions = sqliteTable('sessions', {
@@ -27,7 +26,6 @@ export const sessions = sqliteTable('sessions', {
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 	twoFactorVerified: integer('two_factor_verified').notNull().default(0)
 });
-
 export type Sessions = typeof sessions.$inferSelect;
 
 export const emailVerificationRequests = sqliteTable('email_verification_requests', {
@@ -39,7 +37,6 @@ export const emailVerificationRequests = sqliteTable('email_verification_request
 	code: text('code').notNull(),
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
 });
-
 export type EmailVerificationRequests = typeof emailVerificationRequests.$inferSelect;
 
 export const passwordResetSessions = sqliteTable('password_reset_sessions', {
@@ -53,5 +50,28 @@ export const passwordResetSessions = sqliteTable('password_reset_sessions', {
 	emailVerified: integer('email_verified').notNull().default(0),
 	twoFactorVerified: integer('two_factor_verified').notNull().default(0)
 });
-
 export type PasswordResetSessions = typeof passwordResetSessions.$inferSelect;
+
+export const books = sqliteTable('books', {
+	id: text('id').primaryKey(),
+	isbn: integer('isbn'), // TODO: decide whether to enforce an isbn
+	title: text('title').notNull(),
+	author: text('author').notNull(),
+	owner: integer('owner')
+		.notNull()
+		.references(() => users.id),
+	lentTo: integer('lent_to').references(() => users.id)
+});
+export type Books = typeof books.$inferSelect;
+
+export const bookActivity = sqliteTable('book_status', {
+	id: text('id').primaryKey(),
+	book: text('book')
+		.notNull()
+		.references(() => books.id),
+	user: integer('user_id')
+		.notNull()
+		.references(() => users.id),
+	status: text('status', { enum: ['finished', 'reading', 'todo'] }).notNull()
+});
+export type BookActivity = typeof bookActivity.$inferSelect;

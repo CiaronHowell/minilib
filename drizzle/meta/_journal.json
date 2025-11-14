@@ -43,6 +43,13 @@
       "when": 1762648882360,
       "tag": "0005_elite_tenebrous",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1763126949570,
+      "tag": "0006_normal_mole_man",
+      "breakpoints": true
     }
   ]
 }
