@@ -45,11 +45,13 @@
 					<Form.Field form={emailForm} name="email">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Form.Label class="font-light"
-									>Your email: <span class="font-semibold">{data.user.email}</span></Form.Label
-								>
-								<Form.Label class="font-light">New email:</Form.Label>
-								<Input {...props} bind:value={$emailFormData.email} />
+								<Form.Description class="-text-muted text-base font-light">
+									Your email: <span class="font-semibold">{data.user.email}</span>
+								</Form.Description>
+								<div class="flex gap-2">
+									<Form.Label class="text-base font-light">New email:</Form.Label>
+									<Input {...props} class="w-fit" bind:value={$emailFormData.email} />
+								</div>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -66,7 +68,7 @@
 				<Form.Field form={passwordForm} name="currPassword">
 					<Form.Control>
 						{#snippet children({ props })}
-							<Form.Label class="font-light">Current password</Form.Label>
+							<Form.Label class="text-base font-light">Current password</Form.Label>
 							<Input {...props} type="password" bind:value={$passwordFormData.currPassword} />
 						{/snippet}
 					</Form.Control>
@@ -75,15 +77,15 @@
 				<Form.Field form={passwordForm} name="newPassword">
 					<Form.Control>
 						{#snippet children({ props })}
-							<Form.Label class="font-light">New password</Form.Label>
+							<Form.Label class="text-base font-light">New password</Form.Label>
 							<Input {...props} type="password" bind:value={$passwordFormData.newPassword} />
 						{/snippet}
 					</Form.Control>
 					<Form.FieldErrors />
+					{#if $passwordMessage}
+						<Form.Description>{$passwordMessage}</Form.Description>
+					{/if}
 				</Form.Field>
-				{#if $passwordMessage}
-					<Form.Description>{$passwordMessage}</Form.Description>
-				{/if}
 				<Form.Button>Update</Form.Button>
 			</form>
 			{#if data.user.registered2FA}
@@ -97,7 +99,9 @@
 				<Separator class="col-span-2" />
 				<h1 class="font-semibold">Recovery code</h1>
 				<div class="flex items-center gap-4">
-					<p class="font-light">Your recovery code is: {data.recoveryCode}</p>
+					<p class="font-light">
+						Your recovery code is: <span class="font-bold">{data.recoveryCode}</span>
+					</p>
 					<Button>Generate new code</Button>
 				</div>
 			{/if}
