@@ -1,17 +1,21 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 import { users } from './users';
 
-export const books = sqliteTable('books', {
-	id: integer('id').primaryKey(),
-	// TODO: decide whether to enforce an isbn, people might want to add books without
-	isbn: integer('isbn'),
-	title: text('title').notNull(),
-	author: text('author').notNull(),
-	owner: integer('owner')
-		.notNull()
-		.references(() => users.id),
-	loanedTo: integer('loaned_to').references(() => users.id)
-});
+export const books = sqliteTable(
+	'books',
+	{
+		id: integer('id').primaryKey(),
+		// TODO: decide whether to enforce an isbn, people might want to add books without
+		isbn: integer('isbn').unique(),
+		title: text('title').notNull(),
+		author: text('author').notNull(),
+		owner: integer('owner')
+			.notNull()
+			.references(() => users.id),
+		loanedTo: integer('loaned_to').references(() => users.id)
+	},
+	(t) => [unique().on(t.title, t.author)]
+);
 export type Books = typeof books.$inferSelect;
 
 // Current status
@@ -49,7 +53,7 @@ export const bookActivity = sqliteTable('book_activity', {
 		.notNull()
 		.references(() => users.id),
 	action: text('status', {
-		enum: bookStatusList
+		enum: bookStatusList // TODO: expand with other actions
 	}).notNull()
 });
 export type BookActivity = typeof bookActivity.$inferSelect;
