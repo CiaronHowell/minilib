@@ -64,6 +64,13 @@
       "when": 1763136487494,
       "tag": "0008_amusing_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1763234482371,
+      "tag": "0009_brown_silvermane",
+      "breakpoints": true
     }
   ]
 }

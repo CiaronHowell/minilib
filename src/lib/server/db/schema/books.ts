@@ -2,7 +2,7 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from './users';
 
 export const books = sqliteTable('books', {
-	id: text('id').primaryKey(),
+	id: integer('id').primaryKey(),
 	// TODO: decide whether to enforce an isbn, people might want to add books without
 	isbn: integer('isbn'),
 	title: text('title').notNull(),
@@ -27,7 +27,7 @@ enum status {
 
 const bookStatusList = Object.values(status) as [string, ...string[]];
 export const bookStatus = sqliteTable('book_status', {
-	id: text('id').primaryKey(),
+	id: integer('id').primaryKey(),
 	book: text('book')
 		.notNull()
 		.references(() => books.id),
@@ -41,7 +41,7 @@ export const bookStatus = sqliteTable('book_status', {
 export type BookStatus = typeof bookStatus.$inferSelect;
 
 export const bookActivity = sqliteTable('book_activity', {
-	id: text('id').primaryKey(),
+	id: integer('id').primaryKey(),
 	book: text('book')
 		.notNull()
 		.references(() => books.id),
