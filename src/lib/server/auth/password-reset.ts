@@ -1,11 +1,10 @@
-import { db } from './db';
+import { db } from '$lib/server/db';
 import { encodeHexLowerCase } from '@oslojs/encoding';
 import { generateRandomOTP } from './utils';
 import { sha256 } from '@oslojs/crypto/sha2';
-
 import type { RequestEvent } from '@sveltejs/kit';
 import type { User } from './user';
-import { passwordResetSessions, users } from './db/schema/users';
+import { passwordResetSessions, users } from '$lib/server/db/schema/users';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
 
 export async function createPasswordResetSession(

@@ -3,20 +3,20 @@ import { schema } from '$lib/components/ui/register-form';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoadEvent } from './$types.js';
-import { checkEmailAvailability } from '$lib/server/email.js';
-import { RefillingTokenBucket } from '$lib/server/rate-limit.js';
-import { createUser } from '$lib/server/user.js';
+import { checkEmailAvailability } from '$lib/server/auth/email.js';
+import { RefillingTokenBucket } from '$lib/server/auth/rate-limit.js';
+import { createUser } from '$lib/server/auth/user.js';
 import {
 	createEmailVerificationRequest,
 	sendVerificationEmail,
 	setEmailVerificationRequestCookie
-} from '$lib/server/email-verification.js';
+} from '$lib/server/auth/email-verification.js';
 import {
 	createSession,
 	generateSessionToken,
 	setSessionTokenCookie,
 	type SessionFlags
-} from '$lib/server/session.js';
+} from '$lib/server/auth/session.js';
 
 const ipBucket = new RefillingTokenBucket<string>(3, 10);
 

@@ -3,15 +3,15 @@ import { schema } from '$lib/components/ui/login-form';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoadEvent } from './$types.js';
-import { RefillingTokenBucket, Throttler } from '$lib/server/rate-limit.js';
-import { getUserFromEmail, getUserPasswordHash } from '$lib/server/user.js';
-import { verifyPasswordHash } from '$lib/server/password.js';
+import { RefillingTokenBucket, Throttler } from '$lib/server/auth/rate-limit.js';
+import { getUserFromEmail, getUserPasswordHash } from '$lib/server/auth/user.js';
+import { verifyPasswordHash } from '$lib/server/auth/password.js';
 import {
 	createSession,
 	generateSessionToken,
 	setSessionTokenCookie,
 	type SessionFlags
-} from '$lib/server/session.js';
+} from '$lib/server/auth/session.js';
 
 export const load = async (event: PageServerLoadEvent) => {
 	if (event.locals.session !== null && event.locals.user !== null) {

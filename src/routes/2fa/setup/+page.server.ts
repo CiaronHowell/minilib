@@ -1,9 +1,9 @@
 import { createTOTPKeyURI, verifyTOTP } from '@oslojs/otp';
 import { fail, redirect } from '@sveltejs/kit';
 import { decodeBase64, encodeBase64 } from '@oslojs/encoding';
-import { updateUserTOTPKey } from '$lib/server/user';
-import { setSessionAs2FAVerified } from '$lib/server/session';
-import { RefillingTokenBucket } from '$lib/server/rate-limit';
+import { updateUserTOTPKey } from '$lib/server/auth/user';
+import { setSessionAs2FAVerified } from '$lib/server/auth/session';
+import { RefillingTokenBucket } from '$lib/server/auth/rate-limit';
 import { renderSVG } from 'uqr';
 
 import type { Actions } from './$types';

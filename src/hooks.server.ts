@@ -1,9 +1,9 @@
-import { RefillingTokenBucket } from '$lib/server/rate-limit';
+import { RefillingTokenBucket } from '$lib/server/auth/rate-limit';
 import {
 	deleteSessionTokenCookie,
 	setSessionTokenCookie,
 	validateSessionToken
-} from '$lib/server/session';
+} from '$lib/server/auth/session';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 

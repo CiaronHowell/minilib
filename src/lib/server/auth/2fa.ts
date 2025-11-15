@@ -1,5 +1,5 @@
 import { eq, and } from 'drizzle-orm';
-import { db } from './db';
+import { db } from '$lib/server/db';
 import { users, sessions } from '$lib/server/db/schema/users';
 import { decryptToString, encryptString } from './encryption';
 import { ExpiringTokenBucket } from './rate-limit';

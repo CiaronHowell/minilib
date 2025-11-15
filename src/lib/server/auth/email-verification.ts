@@ -1,10 +1,10 @@
 import { generateRandomOTP } from './utils';
-import { db } from './db';
+import { db } from '$lib/server/db';
 import { ExpiringTokenBucket } from './rate-limit';
 import { encodeBase32 } from '@oslojs/encoding';
 
 import type { RequestEvent } from '@sveltejs/kit';
-import { emailVerificationRequests, type EmailVerificationRequests } from './db/schema/users';
+import { emailVerificationRequests, type EmailVerificationRequests } from '$lib/server/db/schema/users';
 import { and, eq } from 'drizzle-orm';
 
 export async function getUserEmailVerificationRequest(

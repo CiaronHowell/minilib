@@ -1,11 +1,10 @@
-import { db } from './db';
+import { db } from '$lib/server/db';
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
-
 import type { User } from './user';
 import type { RequestEvent } from '@sveltejs/kit';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
-import { sessions, users } from './db/schema/users';
+import { sessions, users } from '$lib/server/db/schema/users';
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));

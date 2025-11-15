@@ -3,21 +3,21 @@ import {
 	sendVerificationEmail,
 	sendVerificationEmailBucket,
 	setEmailVerificationRequestCookie
-} from '$lib/server/email-verification';
+} from '$lib/server/auth/email-verification';
 import { fail, redirect } from '@sveltejs/kit';
-import { checkEmailAvailability } from '$lib/server/email';
-import { verifyPasswordHash, verifyPasswordStrength } from '$lib/server/password';
-import { getUserPasswordHash, getUserRecoverCode, updateUserPassword } from '$lib/server/user';
+import { checkEmailAvailability } from '$lib/server/auth/email';
+import { verifyPasswordHash, verifyPasswordStrength } from '$lib/server/auth/password';
+import { getUserPasswordHash, getUserRecoverCode, updateUserPassword } from '$lib/server/auth/user';
 import {
 	createSession,
 	generateSessionToken,
 	invalidateUserSessions,
 	setSessionTokenCookie
-} from '$lib/server/session';
-import { ExpiringTokenBucket } from '$lib/server/rate-limit';
+} from '$lib/server/auth/session';
+import { ExpiringTokenBucket } from '$lib/server/auth/rate-limit';
 
 import type { Actions, RequestEvent } from './$types';
-import type { SessionFlags } from '$lib/server/session';
+import type { SessionFlags } from '$lib/server/auth/session';
 import { message, superForm, superValidate } from 'sveltekit-superforms';
 import { emailSchema, passwordSchema } from './schema';
 import { zod4 } from 'sveltekit-superforms/adapters';
