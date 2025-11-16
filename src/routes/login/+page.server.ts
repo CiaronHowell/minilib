@@ -1,5 +1,5 @@
 import { message, superValidate } from 'sveltekit-superforms';
-import { schema } from '$lib/components/ui/login-form';
+import { schema } from '$lib/components/custom/login-form/index.js';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoadEvent } from './$types.js';

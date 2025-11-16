@@ -1,5 +1,5 @@
 import { superValidate } from 'sveltekit-superforms';
-import { schema } from '$lib/components/ui/register-form';
+import { schema } from '$lib/components/custom/register-form/index.js';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoadEvent } from './$types.js';

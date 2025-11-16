@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RegisterForm } from '$lib/components/ui/register-form';
+	import { RegisterForm } from '$lib/components/custom/register-form/index.js';
 	import type { PageData } from './$types.js';
 
 	let { data }: { data: PageData } = $props();

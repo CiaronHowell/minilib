@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoginForm } from '$lib/components/ui/login-form';
+	import { LoginForm } from '$lib/components/custom/login-form/index.js';
 	import type { PageData } from './$types.js';
 
 	let { data }: { data: PageData } = $props();
