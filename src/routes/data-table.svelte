@@ -12,9 +12,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Input } from '$lib/components/ui/input';
-	import { PlusIcon } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
 	import { Separator } from '$lib/components/ui/separator';
+	import AddBook from './add-book.svelte';
 
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
@@ -77,10 +77,7 @@
 			onchange={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
 			class="max-w-sm"
 		/>
-		<Button variant="secondary">
-			<PlusIcon />
-			Add
-		</Button>
+		<AddBook />
 	</div>
 	<div class="overflow-hidden rounded-md border">
 		<Table.Root>
@@ -102,7 +99,7 @@
 			</Table.Header>
 			<Table.Body>
 				{#each table.getRowModel().rows as row (row.id)}
-					<Table.Row data-state={row.getIsSelected() && 'selected'}>
+					<Table.Row>
 						{#each row.getVisibleCells() as cell (cell.id)}
 							<Table.Cell>
 								<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
