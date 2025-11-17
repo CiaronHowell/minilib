@@ -14,15 +14,19 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
 	import { Separator } from '$lib/components/ui/separator';
-	import AddBook from './add-book.svelte';
+	import type { Snippet } from 'svelte';
 
 	type DataTableProps<TData, TValue> = {
 		columns: ColumnDef<TData, TValue>[];
 		data: TData[];
 	};
 
-	let { data, columns, onlyOwner }: DataTableProps<TData, TValue> & { onlyOwner: boolean } =
-		$props();
+	let {
+		data,
+		columns,
+		onlyOwner,
+		buttons
+	}: DataTableProps<TData, TValue> & { onlyOwner: boolean; buttons: Snippet } = $props();
 
 	if (onlyOwner) {
 		columns = columns.filter((col) => {
@@ -77,7 +81,7 @@
 			onchange={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
 			class="max-w-sm"
 		/>
-		<AddBook />
+		{@render buttons()}
 	</div>
 	<div class="overflow-hidden rounded-md border">
 		<Table.Root>
