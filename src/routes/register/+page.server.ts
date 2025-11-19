@@ -47,7 +47,10 @@ export const actions: Actions = {
 		// TODO: Assumes X-Forwarded-For is always included.
 		const clientIP = event.request.headers.get('X-Forwarded-For');
 		if (clientIP !== null && !ipBucket.check(clientIP, 1)) {
-			form.message = 'Too many requests';
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
 			return fail(429, {
 				form
 			});
@@ -69,7 +72,10 @@ export const actions: Actions = {
 		}
 
 		if (clientIP !== null && !ipBucket.consume(clientIP, 1)) {
-			form.message = 'Too many requests';
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
 			return fail(429, {
 				form
 			});

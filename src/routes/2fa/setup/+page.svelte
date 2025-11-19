@@ -44,7 +44,9 @@
 			<Form.FieldErrors />
 		</Form.Field>
 		{#if $message}
-			<Form.Description>{$message}</Form.Description>
+			<Form.Description class={$message.type == 'success' ? 'text-green-500' : 'text-red-500'}>
+				{$message.text}
+			</Form.Description>
 		{/if}
 		<div class="flex justify-end gap-2">
 			<Form.Button>Save</Form.Button>

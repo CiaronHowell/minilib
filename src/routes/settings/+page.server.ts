@@ -91,7 +91,10 @@ async function updatePasswordAction(event: any) {
 	const session = await createSession(sessionToken, event.locals.user.id, sessionFlags);
 	setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-	return message(passwordForm, 'Successfully updated password');
+	return message(passwordForm, {
+		type: 'success',
+		text: 'Successfully updated password'
+	});
 }
 
 async function updateEmailAction(event: any) {

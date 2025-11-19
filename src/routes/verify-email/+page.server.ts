@@ -196,5 +196,8 @@ async function resendEmail(event: RequestEvent) {
 	sendVerificationEmail(verificationRequest.email, verificationRequest.code);
 	setEmailVerificationRequestCookie(event, verificationRequest);
 
-	return message(form, 'A new code was sent to your inbox.');
+	return message(form, {
+		type: 'success',
+		text: 'A new code was sent to your inbox.'
+	});
 }

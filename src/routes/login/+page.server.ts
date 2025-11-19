@@ -56,21 +56,30 @@ export const actions = {
 
 		const user = await getUserFromEmail(email);
 		if (user === null) {
-			form.message = 'email/password was incorrect';
+			form.message = {
+				type: 'error',
+				text: 'email/password was incorrect'
+			};
 			return fail(400, {
 				form
 			});
 		}
 
 		if (clientIP !== null && !ipBucket.consume(clientIP, 1)) {
-			form.message = 'Too many requests';
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
 			return fail(429, {
 				form
 			});
 		}
 
 		if (!throttler.consume(user.id)) {
-			form.message = 'Too many requests';
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
 			return fail(429, {
 				form
 			});
@@ -79,7 +88,10 @@ export const actions = {
 		const passwordHash = await getUserPasswordHash(user.id);
 		const validPassword = await verifyPasswordHash(passwordHash, password);
 		if (!validPassword) {
-			form.message = 'email/password was incorrect';
+			form.message = {
+				type: 'error',
+				text: 'email/password was incorrect'
+			};
 			return fail(400, {
 				form
 			});

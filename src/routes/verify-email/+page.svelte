@@ -12,7 +12,7 @@
 	const form = superForm(data.form, {
 		validators: zod4Client(schema)
 	});
-    const message = form.message;
+	const message = form.message;
 	const { form: formData, enhance } = form;
 </script>
 
@@ -54,7 +54,9 @@
 					{/snippet}
 				</Form.Control>
 				{#if $message}
-					<Form.Description>{$message}</Form.Description>
+					<Form.Description class={$message.type == 'success' ? 'text-green-500' : 'text-red-500'}>
+						{$message.text}
+					</Form.Description>
 				{/if}
 				<Form.FieldErrors />
 			</Form.Field>

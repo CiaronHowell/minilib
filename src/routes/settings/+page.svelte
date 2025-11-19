@@ -6,7 +6,7 @@
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { emailSchema, passwordSchema, type EmailSchema, type PasswordSchema } from './schema.js';
-	import type { User } from '$lib/server/user.js';
+	import type { User } from '$lib/server/auth/user.js';
 
 	let {
 		data
@@ -57,7 +57,11 @@
 						<Form.FieldErrors />
 					</Form.Field>
 					{#if $emailMessage}
-						<Form.Description>{$emailMessage}</Form.Description>
+						<Form.Description
+							class={$emailMessage.type == 'success' ? 'text-green-500' : 'text-red-500'}
+						>
+							{$emailMessage.text}
+						</Form.Description>
 					{/if}
 					<Form.Button>Update</Form.Button>
 				</form>
@@ -83,7 +87,11 @@
 					</Form.Control>
 					<Form.FieldErrors />
 					{#if $passwordMessage}
-						<Form.Description>{$passwordMessage}</Form.Description>
+						<Form.Description
+							class={$passwordMessage.type == 'success' ? 'text-green-500' : 'text-red-500'}
+						>
+							{$passwordMessage.text}
+						</Form.Description>
 					{/if}
 				</Form.Field>
 				<Form.Button>Update</Form.Button>

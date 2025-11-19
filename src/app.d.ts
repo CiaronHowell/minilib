@@ -8,6 +8,13 @@ declare global {
 			user: User | null;
 			session: Session | null;
 		}
+
+		namespace Superforms {
+			type Message = {
+				type: 'success' | 'error' | 'info';
+				text: string;
+			};
+		}
 	} // interface Error {}
 	// interface Locals {}
 } // interface PageData {}

@@ -5,7 +5,6 @@ import { updateUserTOTPKey } from '$lib/server/auth/user';
 import { setSessionAs2FAVerified } from '$lib/server/auth/session';
 import { RefillingTokenBucket } from '$lib/server/auth/rate-limit';
 import { renderSVG } from 'uqr';
-
 import type { Actions } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
@@ -27,13 +26,13 @@ export async function load(event) {
 	const totpKey = new Uint8Array(20);
 	crypto.getRandomValues(totpKey);
 	const encodedTOTPKey = encodeBase64(totpKey);
-	const keyURI = createTOTPKeyURI('Demo', event.locals.user.email, totpKey, 30, 6);
+	const keyURI = createTOTPKeyURI('MiniLib', event.locals.user.email, totpKey, 30, 6);
 	const qrcode = renderSVG(keyURI);
 	const form = await superValidate(zod4(schema));
 	form.data.key = encodedTOTPKey;
 	return {
 		qrcode,
-        form
+		form
 	};
 }
 
@@ -45,25 +44,37 @@ async function action(event: any) {
 	const form = await superValidate(event.request, zod4(schema));
 
 	if (event.locals.session === null || event.locals.user === null) {
-		form.message = 'Not authenticated';
+		form.message = {
+			type: 'error',
+			text: 'Not authenticated'
+		};
 		return fail(401, {
 			form
 		});
 	}
 	if (!event.locals.user.emailVerified) {
-		form.message = 'Forbidden';
+		form.message = {
+			type: 'error',
+			text: 'Forbidden'
+		};
 		return fail(403, {
 			form
 		});
 	}
 	if (event.locals.user.registered2FA && !event.locals.session.twoFactorVerified) {
-		form.message = 'Forbidden';
+		form.message = {
+			type: 'error',
+			text: 'Forbidden'
+		};
 		return fail(403, {
 			form
 		});
 	}
 	if (!totpUpdateBucket.check(event.locals.user.id, 1)) {
-		form.message = 'Too many requests';
+		form.message = {
+			type: 'error',
+			text: 'Too many requests'
+		};
 		return fail(429, {
 			form
 		});
@@ -80,7 +91,10 @@ async function action(event: any) {
 	}
 
 	if (!totpUpdateBucket.consume(event.locals.user.id, 1)) {
-		form.message = 'Too many requests';
+		form.message = {
+			type: 'error',
+			text: 'Too many requests'
+		};
 		return fail(429, {
 			form
 		});
