@@ -28,7 +28,7 @@
 	<Form.Field {form} name="title">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Book title<span class="text-red-600">*</span></Form.Label>
+				<Form.Label><span class="text-red-600">*</span>Book title</Form.Label>
 				<Input
 					{...props}
 					bind:value={$formData.title}
@@ -42,7 +42,7 @@
 	<Form.Field {form} name="author">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Author</Form.Label>
+				<Form.Label><span class="text-red-600">*</span>Author</Form.Label>
 				<Input {...props} bind:value={$formData.author} placeholder="Dan Abnett" />
 			{/snippet}
 		</Form.Control>
@@ -62,7 +62,7 @@
 	<Form.Field {form} name="owner">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Book Owner<span class="text-red-600">*</span></Form.Label>
+				<Form.Label><span class="text-red-600">*</span>Owner</Form.Label>
 				<Form.Description>Who bought the book?</Form.Description>
 				<InputGroup.Root>
 					<!-- TODO: Could make the default the current user -->
