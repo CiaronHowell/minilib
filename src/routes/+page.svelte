@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { BookTable, columns } from '$lib/components/custom/book-table';
+	import { ManualBookForm } from '$lib/components/custom/manual-book-form';
+	import type { PageData } from './$types';
 	import AddBook from './add-book.svelte';
 
-	let { data } = $props();
+	let { data }: { data: PageData } = $props();
 </script>
 
 <div class="flex grow justify-center">
@@ -10,7 +12,11 @@
 		<h1 class="text-2xl font-bold">Your Library</h1>
 		<BookTable data={data.books} onlyOwner={true} {columns}>
 			{#snippet buttons()}
-				<AddBook />
+				<AddBook>
+					{#snippet manualBookForm()}
+						<ManualBookForm data={data.manualBookForm} />
+					{/snippet}
+				</AddBook>
 			{/snippet}
 		</BookTable>
 	</div>

@@ -1,7 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
-import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth/session';
-import type { Book } from './columns';
+import type { Book } from '$lib/components/custom/book-table';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { schema as manualBookFormSchema } from '$lib/components/custom/manual-book-form';
+import { RefillingTokenBucket } from '$lib/server/auth/rate-limit';
 
 export const load: PageServerLoad = async (event: RequestEvent) => {
 	// Not logged in
@@ -87,21 +90,48 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 	// User is logged in already
 	return {
 		user: event.locals.user,
+		manualBookForm: await superValidate(zod4(manualBookFormSchema)),
 		books
 	};
 };
 
+const ipBucket = new RefillingTokenBucket<string>(3, 10);
+
 export const actions: Actions = {
-	default: async (event) => {
-		if (event.locals.session === null) {
-			return fail(401, {
-				message: 'Not authenticated'
+	manual: async (event) => {
+		const form = await superValidate(event.request, zod4(manualBookFormSchema));
+
+		const clientIP = event.request.headers.get('X-Forwarded-For');
+		if (clientIP !== null && !ipBucket.check(clientIP, 1)) {
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
+			return fail(429, {
+				form
 			});
 		}
 
-		await invalidateSession(event.locals.session.id);
-		deleteSessionTokenCookie(event);
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
 
-		return redirect(302, '/login');
+		if (clientIP !== null && !ipBucket.consume(clientIP, 1)) {
+			form.message = {
+				type: 'error',
+				text: 'Too many requests'
+			};
+			return fail(429, {
+				form
+			});
+		}
+
+		// TODO:
+		// const book = await createBook(...);
+		console.log('form: ', form.data);
+
+		return message(form, { type: 'success', text: 'Successfully stored book in your library!' });
 	}
 };

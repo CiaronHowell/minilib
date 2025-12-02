@@ -8,6 +8,7 @@
 	import * as InputGroup from '$lib/components/ui/input-group';
 	import { Separator } from '$lib/components/ui/separator';
 	import { TextSeparator } from '$lib/components/custom/text-separator';
+	import type { Snippet } from 'svelte';
 
 	let isbnInput = $state(['']);
 
@@ -45,6 +46,8 @@
 		const node = document.getElementById(`input-${index + 1}`);
 		node?.focus();
 	};
+
+	let { manualBookForm }: { manualBookForm: Snippet } = $props();
 </script>
 
 <Sheet.Root>
@@ -101,6 +104,7 @@
 							<Label>Owner</Label>
 							<p class="text-sm text-gray-500">Who to assign the books to.</p>
 						</div>
+
 						<InputGroup.Root>
 							<!-- TODO: Could make the default the current user -->
 							<InputGroup.Input id="owner" />
@@ -139,17 +143,19 @@
 							<Button size="icon"><SearchIcon /></Button>
 						</div>
 
-						<TextSeparator text="Results" />
+						<TextSeparator text="results" />
 
 						<div>Table of search results with the ability to select which book...</div>
 
-						<div>A manual book form autofilled by the information fetched based on the book selected...</div>
-
+						<div>
+							A manual book form autofilled by the information fetched based on the book selected...
+						</div>
 					</div>
 				</Tabs.Content>
 
 				<Tabs.Content value="manual">
-					<div class="flex flex-col gap-2">Full book form....</div>
+					<!-- <ManualBookForm data={manualBookFormData} /> -->
+					{@render manualBookForm()}
 				</Tabs.Content>
 			</Tabs.Root>
 		</div>
