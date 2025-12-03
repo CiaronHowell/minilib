@@ -2,7 +2,7 @@
 	import { BookTable, columns } from '$lib/components/custom/book-table';
 	import { ManualBookForm } from '$lib/components/custom/manual-book-form';
 	import type { PageData } from './$types';
-	import AddBook from './add-book.svelte';
+	import AddBookSheet from './add-book-sheet.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -12,11 +12,12 @@
 		<h1 class="text-2xl font-bold">Your Library</h1>
 		<BookTable data={data.books} onlyOwner={true} {columns}>
 			{#snippet buttons()}
-				<AddBook>
+				<!-- Buttons above the data table -->
+				<AddBookSheet>
 					{#snippet manualBookForm()}
 						<ManualBookForm data={data.manualBookForm} />
 					{/snippet}
-				</AddBook>
+				</AddBookSheet>
 			{/snippet}
 		</BookTable>
 	</div>
