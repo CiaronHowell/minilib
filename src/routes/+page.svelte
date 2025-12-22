@@ -10,7 +10,7 @@
 <div class="flex grow justify-center">
 	<div class="flex w-2/3 flex-col p-5">
 		<h1 class="text-2xl font-bold">Your Library</h1>
-		<BookTable data={data.books} onlyOwner={true} {columns}>
+		<BookTable data={data.books} onlyOwner {columns}>
 			{#snippet buttons()}
 				<!-- Buttons above the data table -->
 				<AddBookSheet>

@@ -1,14 +1,13 @@
 <script lang="ts">
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { Button } from '$lib/components/ui/button';
-	import { LibraryBig, LogOut, MoonIcon, Settings, SunIcon } from 'lucide-svelte';
+	import { LibraryBig } from 'lucide-svelte';
 	import type { LayoutProps } from './$types';
 	import { Separator } from '$lib/components/ui/separator/index';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import * as Avatar from '$lib/components/ui/avatar/index.js';
-	import { goto } from '$app/navigation';
+	import ThemeToggleButton from '$lib/components/custom/theme-toggle-button/theme-toggle-button.svelte';
+	import { AvatarDropdown } from '$lib/components/custom/avatar-dropdown';
 
 	let { data, children }: LayoutProps = $props();
 </script>
@@ -26,45 +25,11 @@
 			</Button>
 		</div>
 		<div class="flex items-center gap-2">
+			<ThemeToggleButton onclick={toggleMode} />
 			<!-- Only show avatar when user has fully logged in -->
 			{#if data.user && data.session?.twoFactorVerified}
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						<span>
-							<Avatar.Root class="size-10">
-								<Avatar.Fallback>
-									{data.user.firstName.charAt(0).toUpperCase() +
-										data.user.lastName.charAt(0).toUpperCase() || '??'}
-								</Avatar.Fallback>
-							</Avatar.Root>
-						</span>
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content>
-						<DropdownMenu.Group>
-							<DropdownMenu.Item onSelect={() => goto('/settings')}>
-								<Settings />
-								User Settings
-							</DropdownMenu.Item>
-						</DropdownMenu.Group>
-						<DropdownMenu.Separator />
-						<DropdownMenu.Group>
-							<DropdownMenu.Item onSelect={() => goto('/logout', { invalidateAll: true })}>
-								<LogOut color="red" />
-								Logout
-							</DropdownMenu.Item>
-						</DropdownMenu.Group>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
+				<AvatarDropdown user={data.user} />
 			{/if}
-			<Button variant="ghost" onclick={toggleMode} size="icon">
-				<SunIcon
-					class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
-				/>
-				<MoonIcon
-					class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
-				/>
-				<span class="sr-only">Toggle theme</span>
-			</Button>
 		</div>
 	</div>
 
