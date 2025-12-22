@@ -5,6 +5,7 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { schema as manualBookFormSchema } from '$lib/components/custom/manual-book-form';
 import { RefillingTokenBucket } from '$lib/server/auth/rate-limit';
+import { addBook, getBooks } from '$lib/server/db/books';
 
 export const load: PageServerLoad = async (event: RequestEvent) => {
 	// Not logged in
@@ -27,65 +28,9 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 		return redirect(302, '/2fa');
 	}
 
-	const books: Book[] = [
-		{
-			id: '728ed52f',
-			title: 'foo',
-			author: 'jimbob',
-			status: 'reading',
-			owner: 'Ciaron'
-		},
-		{
-			id: '489e1d42',
-			title: 'bar',
-			author: 'jimbob',
-			status: 'read',
-			owner: 'Ciaron'
-		},
-		{
-			id: '728ed52f',
-			title: 'foo',
-			author: 'jimbob',
-			status: 'reading',
-			owner: 'Ciaron'
-		},
-		{
-			id: '489e1d42',
-			title: 'bar',
-			author: 'jimbob',
-			status: 'read',
-			owner: 'Ciaron'
-		},
-		{
-			id: '728ed52f',
-			title: 'foo',
-			author: 'jimbob',
-			status: 'reading',
-			owner: 'Ciaron'
-		},
-		{
-			id: '489e1d42',
-			title: 'bar',
-			author: 'jimbob',
-			status: 'read',
-			owner: 'Ciaron'
-		},
-		{
-			id: '728ed52f',
-			title: 'foo',
-			author: 'jimbob',
-			status: 'reading',
-			owner: 'Ciaron'
-		},
-		{
-			id: '489e1d42',
-			title: 'bar',
-			author: 'jimbob',
-			status: 'read',
-			owner: 'Ciaron'
-		}
-		// ...
-	];
+	// TODO: Look into server pagination rather than client - client will do for now
+	// 			https://tanstack.com/table/latest/docs/guide/pagination#should-you-use-client-side-pagination
+	const books = await getBooks();
 
 	// User is logged in already
 	return {
@@ -128,9 +73,21 @@ export const actions: Actions = {
 			});
 		}
 
-		// TODO:
-		// const book = await createBook(...);
-		console.log('form: ', form.data);
+		// TODO: search for user - form.data.owner
+		const user = 1;
+
+		const isbnStr = form.data.isbn;
+		let isbn: number | null = null;
+		if (isbnStr) {
+			isbn = parseInt(isbnStr.replaceAll('-', ''));
+		}
+
+		await addBook({
+			title: form.data.title,
+			author: form.data.author,
+			isbn: isbn,
+			owner: user
+		});
 
 		return message(form, { type: 'success', text: 'Successfully stored book in your library!' });
 	}
