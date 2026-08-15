@@ -44,6 +44,19 @@ const ipBucket = new RefillingTokenBucket<string>(3, 10);
 
 export const actions: Actions = {
 	manual: async (event) => {
+		if (event.locals.session === null || event.locals.user === null) {
+			return redirect(302, '/login');
+		}
+		if (!event.locals.user.emailVerified) {
+			return redirect(302, '/verify-email');
+		}
+		if (!event.locals.user.registered2FA) {
+			return redirect(302, '/2fa/setup');
+		}
+		if (!event.locals.session.twoFactorVerified) {
+			return redirect(302, '/2fa');
+		}
+
 		const form = await superValidate(event.request, zod4(manualBookFormSchema));
 
 		const clientIP = event.request.headers.get('X-Forwarded-For');
@@ -73,9 +86,6 @@ export const actions: Actions = {
 			});
 		}
 
-		// TODO: search for user - form.data.owner
-		const user = 1;
-
 		const isbnStr = form.data.isbn;
 		let isbn: number | null = null;
 		if (isbnStr) {
@@ -86,7 +96,7 @@ export const actions: Actions = {
 			title: form.data.title,
 			author: form.data.author,
 			isbn: isbn,
-			owner: user
+			owner: event.locals.user.id
 		});
 
 		return message(form, { type: 'success', text: 'Successfully stored book in your library!' });
