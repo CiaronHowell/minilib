@@ -30,13 +30,13 @@ pnpm db:studio        # open Drizzle Studio
 
 There is no test suite configured in this repository (no test runner/dependency in `package.json`, no `*.test.*`/`*.spec.*` files). Do not assume `pnpm test` exists.
 
-`DATABASE_URL` (and `DATABASE_AUTH_TOKEN` outside of dev) must be set for the app to start — see `.env.example`. For local dev, `DATABASE_URL="file:local.db"` works against a local SQLite file; `DATABASE_AUTH_TOKEN` is required whenever `dev` is false (see `src/lib/server/db/index.ts`).
+`DATABASE_URL` (and `DATABASE_AUTH_TOKEN` outside of dev) must be set for the app to start — see `.env.example`. For local dev, `DATABASE_URL="file:local.db"` works against a local SQLite file; `DATABASE_AUTH_TOKEN` is required whenever `dev` is false (see `src/lib/server/db/index.ts`). `ENCRYPTION_KEY` (base64 AES-128 key, e.g. `openssl rand -base64 16`) is also required at all times — it encrypts TOTP keys/recovery codes at rest (see `src/lib/server/auth/encryption.ts`).
 
 ## Architecture
 
 ### Stack
 
-- **SvelteKit 5** (Svelte 5 runes) with `adapter-auto`, TypeScript, Vite.
+- **SvelteKit 5** (Svelte 5 runes) with `@sveltejs/adapter-vercel`, TypeScript, Vite.
 - **Tailwind CSS v4** (via `@tailwindcss/vite`) + **shadcn-svelte** component primitives (`bits-ui`, `tw-animate-css`); config in `components.json` — UI aliases: `$lib/components` (`components`), `$lib/components/ui` (`ui`), `$lib/utils` (`utils`).
 - **Drizzle ORM** over **libSQL/Turso** (`drizzle-orm/libsql`, `@libsql/client`), dialect `turso` in `drizzle.config.ts`.
 - **sveltekit-superforms** + **Zod v4** (`zod4` adapter) for all form validation.
@@ -74,3 +74,7 @@ Every form follows the same `sveltekit-superforms` + Zod shape: a `schema.ts` ne
 ### Formatting
 
 Prettier is the sole formatter/linter (`.prettierrc`: tabs, single quotes, no trailing commas, 100 print width, `prettier-plugin-svelte` + `prettier-plugin-tailwindcss` for class sorting). Run `pnpm format` before committing; `pnpm lint` only checks, it does not fix.
+
+### Deployment
+
+The app targets **Vercel** via `@sveltejs/adapter-vercel` (Node.js serverless functions, configured with no options in `svelte.config.js`, so it inherits Vercel's default runtime). A Vercel project importing this repo needs `DATABASE_URL`, `DATABASE_AUTH_TOKEN`, and `ENCRYPTION_KEY` set as environment variables — the app throws on startup if any are missing. `pnpm build` requires the same three vars to be present in the shell (SvelteKit's postbuild step imports server modules to analyze routes), even though the resulting build doesn't embed their values. Password hashing (`@node-rs/argon2`) is a native addon; it has been verified to trace correctly into the Vercel serverless function output via `@vercel/nft`, so no extra bundler config is needed.
