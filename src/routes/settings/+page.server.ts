@@ -7,7 +7,12 @@ import {
 import { fail, redirect } from '@sveltejs/kit';
 import { checkEmailAvailability } from '$lib/server/auth/email';
 import { verifyPasswordHash, verifyPasswordStrength } from '$lib/server/auth/password';
-import { getUserPasswordHash, getUserRecoverCode, updateUserPassword } from '$lib/server/auth/user';
+import {
+	getUserPasswordHash,
+	getUserRecoverCode,
+	resetUserRecoveryCode,
+	updateUserPassword
+} from '$lib/server/auth/user';
 import {
 	createSession,
 	generateSessionToken,
@@ -23,6 +28,7 @@ import { emailSchema, passwordSchema } from './schema';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
 const passwordUpdateBucket = new ExpiringTokenBucket<string>(5, 60 * 30);
+const recoveryCodeRegenerateBucket = new ExpiringTokenBucket<string>(5, 60 * 30);
 
 export async function load(event: RequestEvent) {
 	if (event.locals.session === null || event.locals.user === null) {
@@ -48,7 +54,8 @@ export async function load(event: RequestEvent) {
 
 export const actions: Actions = {
 	password: updatePasswordAction,
-	email: updateEmailAction
+	email: updateEmailAction,
+	recoveryCode: regenerateRecoveryCodeAction
 };
 
 async function updatePasswordAction(event: any) {
@@ -133,4 +140,26 @@ async function updateEmailAction(event: any) {
 	setEmailVerificationRequestCookie(event, verificationRequest);
 
 	return redirect(302, '/verify-email');
+}
+
+async function regenerateRecoveryCodeAction(event: RequestEvent) {
+	if (event.locals.session === null || event.locals.user === null) {
+		return fail(401);
+	}
+
+	if (event.locals.user.registered2FA && !event.locals.session.twoFactorVerified) {
+		return fail(403);
+	}
+
+	if (!recoveryCodeRegenerateBucket.check(event.locals.session.id, 1)) {
+		return fail(429);
+	}
+
+	if (!recoveryCodeRegenerateBucket.consume(event.locals.session.id, 1)) {
+		return fail(429);
+	}
+
+	await resetUserRecoveryCode(event.locals.user.id);
+
+	return { success: true };
 }

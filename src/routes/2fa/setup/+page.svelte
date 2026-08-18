@@ -50,8 +50,6 @@
 		{/if}
 		<div class="flex flex-wrap justify-end gap-2">
 			<Form.Button>Save</Form.Button>
-			<!-- TODO: Set 2FA as an option -->
-			<Form.Button>Skip</Form.Button>
 		</div>
 	</form>
 </div>

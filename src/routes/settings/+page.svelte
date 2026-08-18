@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Form from '$lib/components/ui/form';
+	import { enhance } from '$app/forms';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { emailSchema, passwordSchema, type EmailSchema, type PasswordSchema } from './schema.js';
@@ -15,7 +16,7 @@
 			emailForm: SuperValidated<Infer<EmailSchema>>;
 			passwordForm: SuperValidated<Infer<PasswordSchema>>;
 			user: User;
-			recoveryCode: string[] | null;
+			recoveryCode: string | null;
 		};
 	} = $props();
 
@@ -105,12 +106,14 @@
 			{/if}
 			{#if data.recoveryCode !== null}
 				<Separator class="col-span-full" />
-				<h1 class="font-semibold">Recovery code</h1>
+				<h2 class="font-semibold">Recovery code</h2>
 				<div class="flex flex-wrap items-center gap-4">
 					<p class="font-light">
 						Your recovery code is: <span class="font-bold break-all">{data.recoveryCode}</span>
 					</p>
-					<Button>Generate new code</Button>
+					<form method="post" action="?/recoveryCode" use:enhance>
+						<Button type="submit">Generate new code</Button>
+					</form>
 				</div>
 			{/if}
 		</div>
