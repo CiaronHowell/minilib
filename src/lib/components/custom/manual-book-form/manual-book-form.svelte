@@ -7,6 +7,7 @@
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { schema, type Schema } from './schema.js';
 	import { CircleUserIcon } from 'lucide-svelte';
+	import { BarcodeScanner } from '$lib/components/custom/barcode-scanner';
 
 	let { data }: { data: SuperValidated<Infer<Schema>> } = $props();
 
@@ -40,6 +41,11 @@
 		} catch {
 			isbnLookupStatus = 'error';
 		}
+	}
+
+	function handleScan(isbn: string) {
+		$formData.isbn = isbn;
+		lookupIsbn();
 	}
 </script>
 
@@ -96,6 +102,7 @@
 						Couldn't look up that ISBN right now — fill in the details manually.
 					</p>
 				{/if}
+				<BarcodeScanner onScan={handleScan} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
