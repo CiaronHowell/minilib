@@ -45,11 +45,13 @@ There is no test suite configured in this repository (no test runner/dependency 
 ### Routing & page conventions
 
 Routes live under `src/routes`. Each protected/interactive route typically has:
+
 - `+page.svelte` — UI, using shadcn-svelte `ui` components and `custom` components.
 - `+page.server.ts` — `load` performs guard redirects and builds a `superValidate`d form; `actions` re-validates with the same Zod schema, checks rate limits, does the DB/auth work, then returns `fail(...)` or `message(form, {...})`.
 - `schema.ts` (or reused from a `lib/components/custom/*` module) — the Zod schema shared between the load and the action so client and server validation stay in sync.
 
 **Auth gate order** used throughout server `load`/`actions` (see `src/routes/+page.server.ts`, `src/routes/login/+page.server.ts`) — replicate this exact order when adding new protected routes:
+
 1. `event.locals.session === null || event.locals.user === null` → redirect `/login`
 2. `!user.emailVerified` → redirect `/verify-email`
 3. `!user.registered2FA` → redirect `/2fa/setup`

@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
-import type { Book } from '$lib/components/custom/book-table';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { schema as manualBookFormSchema } from '$lib/components/custom/manual-book-form';

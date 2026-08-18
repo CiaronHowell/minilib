@@ -24,7 +24,7 @@ export function encryptString(data: string): Uint8Array {
 }
 
 export function decrypt(encrypted: Uint8Array): Uint8Array {
-	if (encrypted.byteLength < 33) {
+	if (encrypted.byteLength < 32) {
 		throw new Error('Invalid data');
 	}
 	const decipher = createDecipheriv('aes-128-gcm', key, encrypted.slice(0, 16));
