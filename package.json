@@ -52,6 +52,8 @@
 		"@node-rs/argon2": "^2.0.2",
 		"@oslojs/binary": "^1.0.0",
 		"@oslojs/otp": "^1.1.0",
+		"@zxing/browser": "0.1.5",
+		"@zxing/library": "0.21.3",
 		"lucide-svelte": "^0.553.0",
 		"mode-watcher": "^1.1.0",
 		"uqr": "^0.1.2"
