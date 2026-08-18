@@ -16,6 +16,31 @@
 
 	const { form: formData, enhance } = form;
 	const message = form.message;
+
+	let isbnLookupStatus = $state<'idle' | 'loading' | 'not-found' | 'error'>('idle');
+
+	async function lookupIsbn() {
+		const isbn = $formData.isbn;
+		if (!isbn || isbn.replaceAll('-', '').length !== 13) {
+			return;
+		}
+
+		isbnLookupStatus = 'loading';
+		try {
+			const res = await fetch(`/api/isbn-lookup?isbn=${encodeURIComponent(isbn)}`);
+			if (!res.ok) {
+				isbnLookupStatus = res.status === 404 ? 'not-found' : 'error';
+				return;
+			}
+
+			const result: { title: string; author: string } = await res.json();
+			if (!$formData.title) $formData.title = result.title;
+			if (!$formData.author && result.author) $formData.author = result.author;
+			isbnLookupStatus = 'idle';
+		} catch {
+			isbnLookupStatus = 'error';
+		}
+	}
 </script>
 
 <form method="POST" class="space-y-4" action="?/manual" use:enhance>
@@ -53,7 +78,24 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label>ISBN-13</Form.Label>
-				<Input {...props} bind:value={$formData.isbn} placeholder="123-1-123-12345-1" />
+				<Form.Description>Scan or type an ISBN to auto-fill the title and author.</Form.Description>
+				<Input
+					{...props}
+					bind:value={$formData.isbn}
+					onblur={lookupIsbn}
+					placeholder="123-1-123-12345-1"
+				/>
+				{#if isbnLookupStatus === 'loading'}
+					<p class="text-sm text-gray-500">Looking up book details…</p>
+				{:else if isbnLookupStatus === 'not-found'}
+					<p class="text-sm text-gray-500">
+						No book found for that ISBN — fill in the details manually.
+					</p>
+				{:else if isbnLookupStatus === 'error'}
+					<p class="text-sm text-gray-500">
+						Couldn't look up that ISBN right now — fill in the details manually.
+					</p>
+				{/if}
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
