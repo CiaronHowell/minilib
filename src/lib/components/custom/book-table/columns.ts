@@ -1,12 +1,8 @@
 import type { ColumnDef } from '@tanstack/table-core';
+import type { Books } from '$lib/server/db/schema/books';
 
-export type Book = {
-	id: string;
-	title: string;
-	author: string;
-	status: 'reading' | 'read' | 'loaned_out';
-	owner: string; // TODO: Hide this column if view is "Your Library"
-};
+// TODO: add a "status" column once per-user book status (see schema/books.ts) is wired into getBooks()
+export type Book = Books;
 
 export const columns: ColumnDef<Book>[] = [
 	{
@@ -18,11 +14,7 @@ export const columns: ColumnDef<Book>[] = [
 		header: 'Author'
 	},
 	{
-		accessorKey: 'status',
-		header: 'Status'
-	},
-	{
 		accessorKey: 'owner',
-		header: 'Owner'
+		header: 'Owner' // TODO: Hide this column if view is "Your Library"
 	}
 ];
