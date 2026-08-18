@@ -14,6 +14,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
 	import { Separator } from '$lib/components/ui/separator';
+	import { BookIcon } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	type DataTableProps<TData, TValue> = {
@@ -112,7 +113,17 @@
 					</Table.Row>
 				{:else}
 					<Table.Row>
-						<Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+						<Table.Cell colspan={columns.length} class="h-32 text-center">
+							{#if data.length === 0}
+								<div class="text-muted-foreground flex flex-col items-center justify-center gap-2">
+									<BookIcon class="size-8" />
+									<p class="font-medium">Your library is empty</p>
+									<p class="text-sm">Add your first book to get started.</p>
+								</div>
+							{:else}
+								<p class="text-muted-foreground">No books match your filter.</p>
+							{/if}
+						</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>

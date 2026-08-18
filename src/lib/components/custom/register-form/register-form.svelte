@@ -11,7 +11,7 @@
 		validators: zod4Client(schema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <form method="POST" class="space-y-6" use:enhance>
@@ -66,6 +66,6 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button>Register</Form.Button>
+	<Form.Button disabled={$submitting}>{$submitting ? 'Registering…' : 'Register'}</Form.Button>
 	<Form.Button href="/">Back</Form.Button>
 </form>

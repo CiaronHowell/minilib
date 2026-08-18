@@ -13,7 +13,7 @@
 		validators: zod4Client(schema)
 	});
 	const message = form.message;
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="m-auto flex w-[calc(100%-2rem)] max-w-md flex-col rounded-xl border p-6 sm:p-7">
@@ -60,9 +60,13 @@
 				{/if}
 				<Form.FieldErrors />
 			</Form.Field>
-			<Form.Button>Verify</Form.Button>
-			<Form.Button variant="secondary" type="submit" formaction="?/resend" formnovalidate
-				>Resend code</Form.Button
+			<Form.Button disabled={$submitting}>{$submitting ? 'Verifying…' : 'Verify'}</Form.Button>
+			<Form.Button
+				variant="secondary"
+				type="submit"
+				formaction="?/resend"
+				formnovalidate
+				disabled={$submitting}>Resend code</Form.Button
 			>
 			<!-- TODO: Move this to nav, under an account button -->
 			<Form.Button variant="link" href="/settings">Change your email</Form.Button>

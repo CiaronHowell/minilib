@@ -23,7 +23,12 @@
 	const emailForm = superForm(data.emailForm, {
 		validators: zod4Client(emailSchema)
 	});
-	const { form: emailFormData, message: emailMessage, enhance: emailEnhance } = emailForm;
+	const {
+		form: emailFormData,
+		message: emailMessage,
+		enhance: emailEnhance,
+		submitting: emailSubmitting
+	} = emailForm;
 
 	const passwordForm = superForm(data.passwordForm, {
 		validators: zod4Client(passwordSchema)
@@ -31,7 +36,8 @@
 	const {
 		form: passwordFormData,
 		message: passwordMessage,
-		enhance: passwordEnhance
+		enhance: passwordEnhance,
+		submitting: passwordSubmitting
 	} = passwordForm;
 </script>
 
@@ -64,7 +70,9 @@
 							{$emailMessage.text}
 						</Form.Description>
 					{/if}
-					<Form.Button>Update</Form.Button>
+					<Form.Button disabled={$emailSubmitting}
+						>{$emailSubmitting ? 'Updating…' : 'Update'}</Form.Button
+					>
 				</form>
 			</div>
 			<Separator class="col-span-full" />
@@ -95,7 +103,9 @@
 						</Form.Description>
 					{/if}
 				</Form.Field>
-				<Form.Button>Update</Form.Button>
+				<Form.Button disabled={$passwordSubmitting}
+					>{$passwordSubmitting ? 'Updating…' : 'Update'}</Form.Button
+				>
 			</form>
 			{#if data.user.registered2FA}
 				<Separator class="col-span-full" />

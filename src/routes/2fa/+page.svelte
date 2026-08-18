@@ -12,7 +12,7 @@
 		validators: zod4Client(schema)
 	});
 
-	const { form: formData, message, enhance } = form;
+	const { form: formData, message, enhance, submitting } = form;
 </script>
 
 <div
@@ -37,7 +37,7 @@
 			</Form.Description>
 		{/if}
 		<div class="mt-[var(--form-gap)] flex flex-wrap justify-end gap-2">
-			<Form.Button>Verify</Form.Button>
+			<Form.Button disabled={$submitting}>{$submitting ? 'Verifying…' : 'Verify'}</Form.Button>
 			<Form.Button href="/2fa/reset">Use recovery code</Form.Button>
 		</div>
 	</form>

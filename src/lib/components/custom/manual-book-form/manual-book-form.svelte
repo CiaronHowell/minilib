@@ -15,7 +15,7 @@
 		validators: zod4Client(schema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 	const message = form.message;
 
 	let isbnLookupStatus = $state<'idle' | 'loading' | 'not-found' | 'error'>('idle');
@@ -130,6 +130,6 @@
 		{/if}
 	</Form.Field>
 
-	<Form.Button>Add Book</Form.Button>
+	<Form.Button disabled={$submitting}>{$submitting ? 'Adding…' : 'Add Book'}</Form.Button>
 	<Form.Button type="reset" onclick={() => ($message = undefined)}>Clear</Form.Button>
 </form>

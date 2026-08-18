@@ -11,7 +11,7 @@
 		validators: zod4Client(schema)
 	});
 	const message = form.message;
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="m-auto flex w-[calc(100%-2rem)] max-w-md flex-col gap-5 rounded-xl border p-5">
@@ -49,7 +49,7 @@
 			</Form.Description>
 		{/if}
 		<div class="flex flex-wrap justify-end gap-2">
-			<Form.Button>Save</Form.Button>
+			<Form.Button disabled={$submitting}>{$submitting ? 'Saving…' : 'Save'}</Form.Button>
 		</div>
 	</form>
 </div>
