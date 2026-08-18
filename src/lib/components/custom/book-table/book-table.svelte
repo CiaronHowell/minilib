@@ -73,13 +73,13 @@
 </script>
 
 <div class="flex flex-col gap-3 py-4">
-	<div class="flex justify-between">
+	<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 		<Input
 			placeholder="Filter by title..."
 			value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
 			oninput={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
 			onchange={(e) => table.getColumn('title')?.setFilterValue(e.currentTarget.value)}
-			class="max-w-sm"
+			class="w-full sm:max-w-sm"
 		/>
 		{@render buttons()}
 	</div>
@@ -118,8 +118,8 @@
 			</Table.Body>
 		</Table.Root>
 	</div>
-	<div class="flex items-center justify-between space-x-2">
-		<div class="flex items-center gap-3">
+	<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+		<div class="flex flex-wrap items-center gap-3">
 			<h1 class="text-sm font-light">Page {pagination.pageIndex + 1} of {table.getPageCount()}</h1>
 			<div class="self-stretch">
 				<Separator orientation="vertical" />
@@ -141,7 +141,7 @@
 				</Select.Root>
 			</div>
 		</div>
-		<div>
+		<div class="flex justify-end gap-2">
 			<DropdownMenu.Root></DropdownMenu.Root>
 			<Button
 				variant="outline"

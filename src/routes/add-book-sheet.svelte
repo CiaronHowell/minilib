@@ -113,7 +113,7 @@
 							</InputGroup.Addon>
 						</InputGroup.Root>
 
-						<div class="flex gap-2">
+						<div class="flex flex-wrap gap-2">
 							<!-- TODO: We will auto ingest any matched ISBNs -->
 							<Button>Search and store</Button>
 							<Button variant="secondary">Clear</Button>
@@ -134,13 +134,13 @@
 							<p class="text-sm text-gray-500">Search for your book by it's title.</p>
 						</div>
 						<div class="flex gap-2">
-							<InputGroup.Root>
+							<InputGroup.Root class="min-w-0 flex-1">
 								<InputGroup.Input id="title" placeholder="Search by book title..." />
 								<InputGroup.Addon>
 									<LabelRoot for="title"><BookIcon size={16} /></LabelRoot>
 								</InputGroup.Addon>
 							</InputGroup.Root>
-							<Button size="icon"><SearchIcon /></Button>
+							<Button size="icon" class="shrink-0"><SearchIcon /></Button>
 						</div>
 
 						<TextSeparator text="results" />

@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="m-auto flex flex-col gap-[var(--form-gap)] rounded-xl border p-5 [--form-gap:--spacing(4)]"
+	class="m-auto flex w-[calc(100%-2rem)] max-w-md flex-col gap-[var(--form-gap)] rounded-xl border p-5 [--form-gap:--spacing(4)]"
 >
 	<div>
 		<h1 class="font-2xl font-bold">Two-factor authentication</h1>
@@ -36,7 +36,7 @@
 				{$message.text}
 			</Form.Description>
 		{/if}
-		<div class="mt-[var(--form-gap)] flex justify-end gap-2">
+		<div class="mt-[var(--form-gap)] flex flex-wrap justify-end gap-2">
 			<Form.Button>Verify</Form.Button>
 			<Form.Button href="/2fa/reset">Use recovery code</Form.Button>
 		</div>
