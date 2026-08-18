@@ -14,10 +14,10 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="m-auto flex flex-col gap-5 rounded-xl border p-5">
+<div class="m-auto flex w-[calc(100%-2rem)] max-w-md flex-col gap-5 rounded-xl border p-5">
 	<h1 class="text-2xl font-medium">Set up two-factor authentication</h1>
 	<div class="flex w-full justify-center">
-		<div class="size-2/3">
+		<div class="w-2/3 max-w-56">
 			{@html data.qrcode}
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 				{$message.text}
 			</Form.Description>
 		{/if}
-		<div class="flex justify-end gap-2">
+		<div class="flex flex-wrap justify-end gap-2">
 			<Form.Button>Save</Form.Button>
 			<!-- TODO: Set 2FA as an option -->
 			<Form.Button>Skip</Form.Button>

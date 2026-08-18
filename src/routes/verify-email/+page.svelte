@@ -16,14 +16,14 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="m-auto flex flex-col rounded-xl border p-7">
+<div class="m-auto flex w-[calc(100%-2rem)] max-w-md flex-col rounded-xl border p-6 sm:p-7">
 	<div class="flex flex-col gap-3">
 		<div>
 			<h1 class="text-2xl font-medium">Verify your email address</h1>
 			<p class="text-sm font-light text-gray-600">
 				We sent an 8-digit code to:
 				<br />
-				<span class="font-medium">{data.email}</span>
+				<span class="font-medium break-all">{data.email}</span>
 			</p>
 		</div>
 		<form method="post" action="?/verify" use:enhance>
