@@ -13,7 +13,7 @@
 		<BookTable data={data.books} onlyOwner {columns}>
 			{#snippet buttons()}
 				<!-- Buttons above the data table -->
-				<AddBookSheet>
+				<AddBookSheet ownerName={`${data.user.firstName} ${data.user.lastName}`}>
 					{#snippet manualBookForm()}
 						<ManualBookForm data={data.manualBookForm} />
 					{/snippet}

@@ -47,7 +47,9 @@
 		node?.focus();
 	};
 
-	let { manualBookForm }: { manualBookForm: Snippet } = $props();
+	let { manualBookForm, ownerName }: { manualBookForm: Snippet; ownerName: string } = $props();
+
+	let owner = $state(ownerName);
 </script>
 
 <Sheet.Root>
@@ -106,8 +108,7 @@
 						</div>
 
 						<InputGroup.Root>
-							<!-- TODO: Could make the default the current user -->
-							<InputGroup.Input id="owner" />
+							<InputGroup.Input id="owner" bind:value={owner} />
 							<InputGroup.Addon>
 								<LabelRoot for="owner"><CircleUserIcon size={16} /></LabelRoot>
 							</InputGroup.Addon>
