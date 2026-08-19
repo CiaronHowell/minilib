@@ -17,7 +17,7 @@ export const passwordSchema = z.object({
 			error: 'Please provide your new password'
 		})
 		.min(8, { error: 'Password is less than 8 characters long' })
-		.max(255, { error: 'Password is too long, make it below 255 characters' }) // TODO: add password strength validation later on, for now we'll just check length
+		.max(255, { error: 'Password is too long, make it below 255 characters' })
 });
 
 export type EmailSchema = typeof emailSchema;

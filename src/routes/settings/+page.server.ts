@@ -80,6 +80,12 @@ async function updatePasswordAction(event: any) {
 		return fail(400, passwordForm);
 	}
 
+	const strongPassword = await verifyPasswordStrength(passwordForm.data.newPassword);
+	if (!strongPassword) {
+		passwordForm.errors.newPassword = ['Password is too weak or has appeared in a data breach'];
+		return fail(400, passwordForm);
+	}
+
 	passwordUpdateBucket.reset(event.locals.session.id);
 	await invalidateUserSessions(event.locals.user.id);
 	await updateUserPassword(event.locals.user.id, passwordForm.data.newPassword);
