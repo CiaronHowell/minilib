@@ -114,7 +114,6 @@
 				<Form.Label><span class="text-red-600">*</span>Owner</Form.Label>
 				<Form.Description>Who bought the book?</Form.Description>
 				<InputGroup.Root>
-					<!-- TODO: Could make the default the current user -->
 					<InputGroup.Input {...props} bind:value={$formData.owner} placeholder="Ciaron Howell" />
 					<InputGroup.Addon>
 						<LabelRoot><CircleUserIcon size={16} /></LabelRoot>

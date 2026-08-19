@@ -34,7 +34,10 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 	// User is logged in already
 	return {
 		user: event.locals.user,
-		manualBookForm: await superValidate(zod4(manualBookFormSchema)),
+		manualBookForm: await superValidate(
+			{ owner: `${event.locals.user.firstName} ${event.locals.user.lastName}` },
+			zod4(manualBookFormSchema)
+		),
 		books
 	};
 };
