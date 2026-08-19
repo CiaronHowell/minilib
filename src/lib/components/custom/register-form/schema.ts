@@ -8,7 +8,7 @@ export const schema = z
 		password: z
 			.string()
 			.min(8, { error: 'Password is less than 8 characters long' })
-			.max(255, { error: 'Password is too long, make it below 255 characters' }), // TODO: add password strength validation later on, for now we'll just check length
+			.max(255, { error: 'Password is too long, make it below 255 characters' }),
 		reenteredPassword: z.string()
 	})
 	.refine((data) => data.password === data.reenteredPassword, {

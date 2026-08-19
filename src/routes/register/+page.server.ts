@@ -4,6 +4,7 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoadEvent } from './$types.js';
 import { checkEmailAvailability } from '$lib/server/auth/email.js';
+import { verifyPasswordStrength } from '$lib/server/auth/password.js';
 import { RefillingTokenBucket } from '$lib/server/auth/rate-limit.js';
 import { createUser } from '$lib/server/auth/user.js';
 import {
@@ -65,6 +66,15 @@ export const actions: Actions = {
 		const emailAvailable = await checkEmailAvailability(form.data.email);
 		if (!emailAvailable) {
 			form.errors.email = ['Email already in use'];
+
+			return fail(400, {
+				form
+			});
+		}
+
+		const strongPassword = await verifyPasswordStrength(form.data.password);
+		if (!strongPassword) {
+			form.errors.password = ['Password is too weak or has appeared in a data breach'];
 
 			return fail(400, {
 				form
